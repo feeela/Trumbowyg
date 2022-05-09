@@ -1329,6 +1329,11 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                         value: title
                     },
                     target: {
+                        type: 'select',
+                        options: {
+                            '_self': 'selbes Fenster',
+                            '_blank': 'neues Fenster',
+                        },
                         label: t.lang.target,
                         value: target
                     }
@@ -1676,11 +1681,28 @@ Object.defineProperty(jQuery.trumbowyg, 'defaultOptions', {
                   }
                   html += field.type(field, fieldId, prefix, lg);
                 } else {
-                  html += '<div class="' + prefix + 'input-row">' +
-                    '<div class="' + prefix + 'input-infos"><label for="' + fieldId + '"><span>' + (lg[l] ? lg[l] : l) + '</span></label></div>' +
-                    '<div class="' + prefix + 'input-html"><input id="' + fieldId + '" type="' + (field.type || 'text') + '" name="' + n + '" ' + attr;
-                    html += (field.type === 'checkbox' && field.value ? ' checked="checked"' : '') + ' value="' + (field.value || '').replace(/"/g, '&quot;') + '"></div>';
-                  html += '</div>';
+                    html += `<div class="${prefix}input-row">
+                        <div class="${prefix}input-infos"><label for="${fieldId}"><span>${field.label}</span></label></div>
+                        <div class="${prefix}input-html">`;
+
+                    switch (field.type) {
+                        case 'select':
+                            let options = '';
+                            for (let key in field.options) {
+                                let selected = (field.value == key) ? 'selected' : '';
+                                options += `<option value="${key}" ${selected}>${field.options[key]}</option>`;
+                            }
+                            html += `<select name="${n}" id="${fieldId}" class="trumbowyg-dropdown kasperle">${options}</select>`;
+                            break;
+                        default:
+                            html += '<input id="' + fieldId + '" type="' +
+                                (field.type || 'text') + '" name="' + n + '" ' + attr;
+                            html += (field.type === 'checkbox' && field.value ? ' checked="checked"' : '') +
+                                ' value="' + (field.value || '').replace(/"/g, '&quot;') + '">';
+                            break;
+                    }
+
+                    html += '</div></div>';
                 }
             });
 

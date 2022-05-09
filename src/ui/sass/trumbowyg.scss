@@ -412,6 +412,14 @@ $modal-label-width: 150px;
                 }
             }
 
+            .trumbowyg-dropdown {
+                -moz-appearance: auto;
+                -webkit-appearance: auto;
+                max-width: none;
+                background-color: inherit;
+                box-shadow: none;
+            }
+
             input[type="checkbox"] {
               width: 16px;
               height: 16px;
